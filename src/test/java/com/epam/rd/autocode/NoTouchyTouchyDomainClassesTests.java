@@ -1,5 +1,6 @@
 package com.epam.rd.autocode;
 
+import com.google.common.collect.ImmutableMap;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -14,16 +15,17 @@ public class NoTouchyTouchyDomainClassesTests {
 
     @Test
     public void testNoChangesToReferenceClasses() throws Exception {
-        final Path sources = Paths.get("src/test/resources");
-        Files.walk(sources)
-                .filter(Files::isRegularFile)
-                .filter(p -> p.toString().endsWith(".ref"))
-                .peek(p -> System.out.println(p))
-                .forEach(ref -> assertSourceEqualsReference(
-                        Paths.get(
-                                "src/main/java/com/epam/rd/autocode/domain",
-                                ref.getFileName().toString().replace(".ref", ".java")),
-                        ref));
+        final ImmutableMap<String, String> src2Ref = ImmutableMap.<String, String>builder()
+                .put("src/main/java/com/epam/rd/autocode/domain/Department.java", "src/test/resources/ref/Department.java")
+                .put("src/main/java/com/epam/rd/autocode/domain/Employee.java", "src/test/resources/ref/Employee.java")
+                .put("src/main/java/com/epam/rd/autocode/domain/FullName.java", "src/test/resources/ref/FullName.java")
+                .put("src/main/java/com/epam/rd/autocode/domain/Position.java", "src/test/resources/ref/Position.java")
+                .put("src/main/java/com/epam/rd/autocode/ConnectionSource.java", "src/test/resources/ref/ConnectionSource.java")
+                .put("src/main/resources/init-ddl.sql", "src/test/resources/ref/init-ddl.sql")
+                .put("src/main/resources/init-dml.sql", "src/test/resources/ref/init-dml.sql")
+                .build();
+
+        src2Ref.forEach((src, ref) -> assertSourceEqualsReference(Paths.get(src), Paths.get(ref)));
     }
 
     private void assertSourceEqualsReference(final Path src, final Path ref) {
