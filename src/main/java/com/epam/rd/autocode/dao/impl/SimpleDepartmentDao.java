@@ -21,9 +21,9 @@ public class SimpleDepartmentDao implements DepartmentDao {
     private static final String SELECT_ALL = "SELECT * FROM DEPARTMENT";
     private static final String UPDATE =
             "UPDATE DEPARTMENT SET NAME = ?, LOCATION = ? WHERE ID = ?";
-    private static final int ID_INDEX = 1;
-    private static final int NAME_INDEX = 2;
-    private static final int LOCATION_INDEX = 3;
+    private static final int ID_INSERT_INDEX = 1;
+    private static final int NAME_INSERT_INDEX = 2;
+    private static final int LOCATION_INSERT_INDEX = 3;
     private static final String ID_COLUMN = "id";
     private static final String NAME_COLUMN = "name";
     private static final String LOCATION_COLUMN = "location";
@@ -87,9 +87,9 @@ public class SimpleDepartmentDao implements DepartmentDao {
     private void insert(Department department) {
         try (Connection connection = ConnectionSource.instance().createConnection();
              PreparedStatement statement = connection.prepareStatement(INSERT)) {
-            statement.setLong(ID_INDEX, department.getId().longValue());
-            statement.setString(NAME_INDEX, department.getName());
-            statement.setString(LOCATION_INDEX, department.getLocation());
+            statement.setLong(ID_INSERT_INDEX, department.getId().longValue());
+            statement.setString(NAME_INSERT_INDEX, department.getName());
+            statement.setString(LOCATION_INSERT_INDEX, department.getLocation());
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
